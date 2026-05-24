@@ -1,6 +1,16 @@
 # Архитектура + Вопросы для созвона с Дмитрием
 
-**Цель:** визуально показать как мы понимаем систему + явно выделить **все неясные места** для созвона. На каждой ❓-метке — конкретный вопрос Дмитрию.
+> ⚠️ **Этот документ — для разработчиков / архива.**
+> Диаграммы здесь рендерятся GitHub-Mermaid в тёмной теме и могут плохо читаться. Зум невозможен.
+>
+> 👉 **Для созвона используй интерактивную презентацию:**
+> **🔗 https://assistant-hub-7k9p2x.vercel.app**
+>
+> Там 16 слайдов, читаемые шрифты, навигация ←/→, раскрывающиеся блоки.
+
+---
+
+**Цель документа:** структурированный архив диаграмм и вопросов для разработки.
 
 После созвона — заменяем ❓ на ответы, диаграммы становятся источником истины для разработки.
 
@@ -80,11 +90,11 @@ flowchart TB
 
     AICoord & AIAnketa & AIEval & AIReview & AIDist & AIDigest --> OR
 
-    style Skeleton fill:#e8f4ea,stroke:#2e7d32,stroke-width:3px
-    style Muscles fill:#fff3e0,stroke:#e65100,stroke-width:3px
-    style Brain fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    style DB fill:#c8e6c9
-    style OR fill:#bbdefb
+    style Skeleton fill:#e8f4ea,stroke:#2e7d32,stroke-width:3px,color:#000
+    style Muscles fill:#fff3e0,stroke:#e65100,stroke-width:3px,color:#000
+    style Brain fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#000
+    style DB fill:#c8e6c9,color:#000,stroke:#333,stroke-width:2px
+    style OR fill:#bbdefb,color:#000,stroke:#333,stroke-width:2px
 ```
 
 ### Как читать схему
@@ -153,11 +163,11 @@ flowchart TD
 
     R290 & R270 & R250 & R200 --> Active([🟢 Активный ассистент<br/>полноценная работа])
 
-    style Funnel fill:#fff4cc
-    style TestZero fill:#fff4cc
-    style Sched fill:#fff4cc
-    style Comm1 fill:#cce5ff
-    style Active fill:#ccffcc
+    style Funnel fill:#fff4cc,color:#000,stroke:#333,stroke-width:2px
+    style TestZero fill:#fff4cc,color:#000,stroke:#333,stroke-width:2px
+    style Sched fill:#fff4cc,color:#000,stroke:#333,stroke-width:2px
+    style Comm1 fill:#cce5ff,color:#000,stroke:#333,stroke-width:2px
+    style Active fill:#ccffcc,color:#000,stroke:#333,stroke-width:2px
 ```
 
 ### ❓ Вопросы по этой диаграмме
@@ -252,10 +262,10 @@ flowchart TD
     WeeklyReview -->|Плохо| RateDown[-20₽/час]
     WeeklyReview -->|OK| Same[Без изменений]
 
-    style Distribute fill:#fff4cc
-    style Tagger fill:#cce5ff
-    style Judge fill:#ffcccc
-    style Payout fill:#ccffcc
+    style Distribute fill:#fff4cc,color:#000,stroke:#333,stroke-width:2px
+    style Tagger fill:#cce5ff,color:#000,stroke:#333,stroke-width:2px
+    style Judge fill:#ffcccc,color:#000,stroke:#333,stroke-width:2px
+    style Payout fill:#ccffcc,color:#000,stroke:#333,stroke-width:2px
 ```
 
 ### ❓ Вопросы по этой диаграмме
@@ -325,10 +335,10 @@ flowchart LR
     TestEval -.-> DB
     ReviewMgr -.-> DB
 
-    style Coord fill:#ccccff
-    style TestEval fill:#ffcccc
-    style Decision fill:#ffe4b5
-    style DB fill:#ccffcc
+    style Coord fill:#ccccff,color:#000,stroke:#333,stroke-width:2px
+    style TestEval fill:#ffcccc,color:#000,stroke:#333,stroke-width:2px
+    style Decision fill:#ffe4b5,color:#000,stroke:#333,stroke-width:2px
+    style DB fill:#ccffcc,color:#000,stroke:#333,stroke-width:2px
 ```
 
 ### ❓ Вопросы по multi-brain
