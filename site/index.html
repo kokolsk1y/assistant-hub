@@ -734,8 +734,9 @@ flowchart TD
 </div>
 
 <script>
+  // ВАЖНО: startOnLoad: false — иначе Mermaid не рендерит скрытые слайды (display:none)
   mermaid.initialize({
-    startOnLoad: true,
+    startOnLoad: false,
     theme: 'dark',
     themeVariables: {
       darkMode: true,
@@ -811,9 +812,42 @@ flowchart TD
   });
 
   buildSidebar();
-  const hashMatch = window.location.hash.match(/slide-(\d+)/);
-  const startIdx = hashMatch ? parseInt(hashMatch[1]) - 1 : 0;
-  showSlide(Math.min(Math.max(startIdx, 0), slides.length - 1));
+
+  // Рендерим Mermaid в ВСЕХ слайдах сразу пока они видимы
+  // (display:none ломает рендер из-за нулевых размеров)
+  async function renderAllDiagramsThenInit() {
+    // 1. Временно показать все слайды для корректного рендера
+    slides.forEach(s => {
+      s.style.display = 'block';
+      s.style.position = 'absolute';
+      s.style.visibility = 'hidden';
+      s.style.left = '-9999px';
+    });
+
+    // 2. Отрендерить все Mermaid-диаграммы
+    try {
+      await mermaid.run({
+        querySelector: '.mermaid'
+      });
+    } catch (err) {
+      console.error('Mermaid render error:', err);
+    }
+
+    // 3. Вернуть слайды в нормальное состояние
+    slides.forEach(s => {
+      s.style.display = '';
+      s.style.position = '';
+      s.style.visibility = '';
+      s.style.left = '';
+    });
+
+    // 4. Показать первый (или из URL hash)
+    const hashMatch = window.location.hash.match(/slide-(\d+)/);
+    const startIdx = hashMatch ? parseInt(hashMatch[1]) - 1 : 0;
+    showSlide(Math.min(Math.max(startIdx, 0), slides.length - 1));
+  }
+
+  renderAllDiagramsThenInit();
 </script>
 
 </body>
