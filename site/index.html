@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assistant Hub — план для созвона с Дмитрием</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f1419;
+    color: #e6e6e6;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Прогресс-бар сверху */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 4px; background: #1a1f29; z-index: 100;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #4dabf7, #82c91e);
+    width: 0%; transition: width 0.3s ease;
+  }
+
+  /* Шапка */
+  header {
+    padding: 20px 32px; background: #1a1f29;
+    border-bottom: 1px solid #2a3441;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  header h1 { font-size: 18px; color: #fff; }
+  header .meta { font-size: 13px; color: #8896a8; }
+
+  /* Контейнер с слайдером и боковой панелью */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 70px);
+  }
+
+  /* Сайдбар со списком этапов */
+  .sidebar {
+    background: #151b24;
+    border-right: 1px solid #2a3441;
+    padding: 16px 0;
+    overflow-y: auto;
+    max-height: calc(100vh - 70px);
+    position: sticky;
+    top: 70px;
+  }
+  .sidebar-title {
+    font-size: 11px; text-transform: uppercase;
+    color: #6b7785; padding: 0 20px 8px;
+    letter-spacing: 0.5px;
+  }
+  .sidebar-item {
+    display: block; padding: 8px 20px;
+    font-size: 13px; color: #b4bfd0;
+    cursor: pointer; border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-item:hover { background: #1a2331; color: #fff; }
+  .sidebar-item.active {
+    background: #1f2937; color: #4dabf7;
+    border-left-color: #4dabf7;
+  }
+  .sidebar-item .num {
+    display: inline-block; width: 22px; color: #6b7785;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Основной контент */
+  .main {
+    padding: 32px 48px;
+    max-width: 1100px;
+    width: 100%;
+  }
+  .slide { display: none; animation: fadeIn 0.3s ease; }
+  .slide.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide-num {
+    font-size: 13px; color: #6b7785;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .slide h2 {
+    font-size: 28px; color: #fff; margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .slide .subtitle {
+    color: #8896a8; font-size: 16px; margin-bottom: 24px;
+  }
+
+  /* Mermaid-блоки */
+  .diagram {
+    background: #1a1f29;
+    border: 1px solid #2a3441;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .diagram .mermaid {
+    text-align: center; min-height: 200px;
+  }
+
+  /* Карточки с содержимым */
+  .card {
+    background: #1a1f29;
+    border: 1px solid #2a3441;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .card h3 {
+    font-size: 16px; color: #fff;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card p { color: #b4bfd0; margin-bottom: 8px; }
+  .card ul { color: #b4bfd0; padding-left: 24px; }
+  .card li { margin-bottom: 6px; }
+
+  /* Раскрывающиеся вопросы */
+  details {
+    background: #1f2937;
+    border: 1px solid #2a3441;
+    border-left: 3px solid #ffd43b;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    cursor: pointer;
+  }
+  details[open] {
+    border-left-color: #82c91e;
+    background: #1a2520;
+  }
+  summary {
+    font-weight: 600; color: #ffd43b;
+    user-select: none;
+    list-style: none;
+  }
+  details[open] summary { color: #82c91e; }
+  summary::before {
+    content: "▶ "; display: inline-block;
+    transition: transform 0.2s; margin-right: 4px;
+  }
+  details[open] summary::before { transform: rotate(90deg); }
+  details > *:not(summary) {
+    margin-top: 12px; cursor: default;
+    color: #d4dde8; padding-left: 12px;
+  }
+  details ul { padding-left: 24px; }
+  details li { margin-bottom: 6px; color: #b4bfd0; }
+
+  /* Цветные метки */
+  .badge {
+    display: inline-block; padding: 2px 10px;
+    border-radius: 12px; font-size: 12px;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+  .badge-skeleton { background: #1a3320; color: #82c91e; border: 1px solid #2d5a3a; }
+  .badge-muscle { background: #3a2a14; color: #ffa94d; border: 1px solid #5a4220; }
+  .badge-question { background: #3a3414; color: #ffd43b; border: 1px solid #5a5022; }
+  .badge-decision { background: #1a2738; color: #4dabf7; border: 1px solid #2a4a6b; }
+
+  /* Навигация снизу */
+  .nav {
+    display: flex; justify-content: space-between;
+    gap: 16px; margin-top: 40px;
+    padding-top: 24px; border-top: 1px solid #2a3441;
+  }
+  .nav button {
+    padding: 12px 24px; border-radius: 8px;
+    border: 1px solid #2a3441;
+    background: #1f2937; color: #fff;
+    cursor: pointer; font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .nav button:hover:not(:disabled) {
+    background: #2a3441; border-color: #4dabf7;
+  }
+  .nav button:disabled {
+    opacity: 0.3; cursor: not-allowed;
+  }
+  .nav .next { background: #1864ab; border-color: #1971c2; }
+  .nav .next:hover:not(:disabled) { background: #1971c2; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar {
+      position: relative; top: 0;
+      max-height: none;
+      border-right: none; border-bottom: 1px solid #2a3441;
+      padding: 12px 0;
+    }
+    .main { padding: 20px 16px; }
+    .slide h2 { font-size: 22px; }
+    header { padding: 12px 16px; }
+    header h1 { font-size: 15px; }
+  }
+
+  /* Стилизация Mermaid (тёмная тема) */
+  .mermaid { background: transparent; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header>
+  <h1>🦾 Assistant Hub — план для созвона с Дмитрием</h1>
+  <div class="meta">v0.1 · <span id="slide-counter">1 / 1</span></div>
+</header>
+
+<div class="layout">
+
+  <!-- БОКОВАЯ ПАНЕЛЬ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-title">Этапы</div>
+    <!-- Заполняется JS -->
+  </aside>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ -->
+  <main class="main" id="main">
+
+    <!-- ===== SLIDE 1: Введение ===== -->
+    <section class="slide" data-title="Введение">
+      <div class="slide-num">Слайд 1 — Введение</div>
+      <h2>Что мы строим</h2>
+      <p class="subtitle">Telegram-платформа, которая постепенно замещает ручную координационную работу менеджера в команде ассистентов.</p>
+
+      <div class="card">
+        <h3>🎯 Цель</h3>
+        <p>Автоматизировать полный цикл работы с ассистентом — от первого отклика на HR-воронку до закрытия оплачиваемой задачи и пересмотра ставки.</p>
+      </div>
+
+      <div class="card">
+        <h3>⚙️ Стек</h3>
+        <ul>
+          <li><b>OpenClaw</b> — мульти-агентный фреймворк (gateway на ПК)</li>
+          <li><b>Neon Postgres</b> — данные кандидатов, FSM, оценки, audit log</li>
+          <li><b>OpenRouter</b> — модели Claude Sonnet 4.6 / Haiku 4.5 / Opus 4.7</li>
+          <li><b>Python aiogram 3</b> — TG-бот</li>
+          <li><b>Хостинг:</b> локально на ПК (MVP), потом VPS</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>❓ Главные открытые вопросы для созвона</summary>
+        <ul>
+          <li>Профиль ассистентов — универсалы или AI-эксперты?</li>
+          <li>Тестовые задания — финальный текст Дмитрия или Коля переделывает?</li>
+          <li>Распределение задач — кнопки в личке (наша позиция) vs реакции в общем чате (в документах)?</li>
+          <li>Ревью — обязательная часть v1 (как в документах) или v2?</li>
+          <li>Граница MVP — где наша зона заканчивается?</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ===== SLIDE 2: Главный принцип ===== -->
+    <section class="slide" data-title="Принцип архитектуры">
+      <div class="slide-num">Слайд 2 — Главный принцип</div>
+      <h2>🦴 Скелет + 💪 Мышцы</h2>
+      <p class="subtitle">Сначала строим работающий <b>детерминированный скелет</b>. Потом наращиваем <b>ИИ-мышцы</b> поверх него. Если ИИ упадёт — скелет продолжает работать.</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+flowchart LR
+    User[👤 Пользователи<br/>TG]
+    subgraph SK [" 🦴 СКЕЛЕТ — работает без ИИ "]
+      direction TB
+      Bot[TG-бот]
+      FSM[FSM в БД]
+      Queue[Очередь задач]
+      Cron[Cron-напоминания]
+    end
+    subgraph MU [" 💪 МЫШЦЫ — ИИ-агенты опционально "]
+      direction TB
+      AI1[Оценка тестов]
+      AI2[Распределение]
+      AI3[Дайджесты]
+    end
+    LLM[(🧠 OpenRouter)]
+
+    User <--> Bot
+    Bot --> FSM
+    Bot --> Queue
+    Cron --> Bot
+    Bot -.может вызвать.-> AI1
+    Queue -.может вызвать.-> AI2
+    Cron -.может вызвать.-> AI3
+    AI1 & AI2 & AI3 --> LLM
+
+    classDef sk fill:#1a3320,stroke:#82c91e,stroke-width:2px,color:#82c91e
+    classDef mu fill:#3a2a14,stroke:#ffa94d,stroke-width:2px,color:#ffa94d
+    class SK sk
+    class MU mu
+        </div>
+      </div>
+
+      <details open>
+        <summary>📊 Что работает «только на скелете» если ИИ упадёт</summary>
+        <ul>
+          <li><b>Анкета</b> → 4 жёстких вопроса вместо живого диалога</li>
+          <li><b>Выбор теста</b> → случайно из библиотеки под направление</li>
+          <li><b>Оценка</b> → задача складывается Дмитрию на ручную проверку</li>
+          <li><b>Распределение</b> → round-robin по очереди</li>
+          <li><b>Дайджест</b> → шаблонная таблица из БД</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>❓ Вопросы Дмитрию по принципу</summary>
+        <ul>
+          <li>Согласен с этим подходом? Первые недели MVP — много ручных нажатий с твоей стороны</li>
+          <li>Готов быть «оператором» 2-4 недели пока ИИ-агенты не введены?</li>
+          <li>Когда ИИ ошибётся — как откатываем? Нужна админ-команда?</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>🛠 Стратегия фаз разработки</summary>
+        <ul>
+          <li><b>Фазы 1-3:</b> скелет полностью (без ИИ). Дмитрий нажимает кнопки</li>
+          <li><b>Фазы 4-6:</b> наращиваем мышцы — одного агента за раз</li>
+          <li><b>Фаза 7+:</b> оптимизация, multi-brain, memory</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ===== SLIDE 3: Источник трафика ===== -->
+    <section class="slide" data-title="Этап 1: Трафик">
+      <div class="slide-num">Этап 1 из 12</div>
+      <h2>Источники трафика</h2>
+      <p class="subtitle">Откуда приходят кандидаты в нашу воронку.</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+flowchart LR
+    A[hh.ru<br/>отклики на вакансии] --> Funnel
+    B[TG-паблики<br/>с IT-вакансиями] --> Funnel
+    C[Сарафан<br/>прямые контакты] --> Funnel
+    Funnel[🔀 HR-воронка<br/>Дмитрия]
+    Funnel --> Pres[📄 Презентация]
+
+    classDef q fill:#3a3414,stroke:#ffd43b,stroke-width:2px,color:#ffd43b
+    class Funnel q
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Что мы знаем</h3>
+        <ul>
+          <li>Воронка автоматизирована — отклики попадают к Дмитрию</li>
+          <li>Источники: hh.ru + TG-паблики (`@FreeVacanciesIT`, `@itvibecodebot` и др.)</li>
+          <li>Кандидату отправляется презентация о проекте</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>❓ Что неясно</summary>
+        <ul>
+          <li>На каком стеке сейчас работает воронка? (Salebot? Sendpulse? Кастомный n8n?)</li>
+          <li>Кто её админ? Можешь дать доступ?</li>
+          <li>Как пробрасывают кандидата дальше? Что приходит человеку-менеджеру?</li>
+          <li>TG-паблики — какой реальный список? hh.ru — какие вакансии-источники?</li>
+          <li>Можем ли мы автоматически подхватывать новых кандидатов из воронки или работаем только с теми кто сам пришёл по QR из презентации?</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>💡 Что предлагаем (наша позиция)</summary>
+        <ul>
+          <li>В v1 — кандидат сам приходит по QR из презентации (`/start src=presentation_v1`)</li>
+          <li>Интеграция с hh.ru API — v1.5 (есть проблемы: нет webhook, только polling каждые 5-10 мин)</li>
+          <li>UTM-источники сохраняем в БД для аналитики</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ===== SLIDE 4: Презентация → Бот ===== -->
+    <section class="slide" data-title="Этап 2: Презентация → Бот">
+      <div class="slide-num">Этап 2 из 12</div>
+      <h2>Из презентации — в бот</h2>
+      <p class="subtitle">Кандидат прочитал презентацию. Как он попадает в нашу систему?</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+flowchart LR
+    Read[📖 Кандидат<br/>прочитал презентацию]
+    Read --> QR[Сканирует QR<br/>или жмёт ссылку]
+    QR --> Start[Бот: /start с UTM-меткой]
+    Start --> PDN{ФЗ-152<br/>согласие на ПДн}
+    PDN -->|❌ Нет| End[Отказ]
+    PDN -->|✅ Да| Anketa[➡️ К анкете]
+
+    classDef d fill:#1a2738,stroke:#4dabf7,stroke-width:2px,color:#4dabf7
+    class PDN d
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Что должно быть в боте</h3>
+        <ul>
+          <li><b>Deeplink:</b> <code>https://t.me/AssistantHubBot?start=src_presentation_v1</code></li>
+          <li><b>Кнопка «Согласен на обработку ПДн»</b> — без неё дальше не идём (ФЗ-152)</li>
+          <li><b>Источник</b> (UTM-метка) сохраняем — потом видим конверсию по каждому источнику</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>❓ Вопросы Дмитрию</summary>
+        <ul>
+          <li>Где сейчас лежит файл презентации? Можешь дать ссылку?</li>
+          <li>Кто её редактирует? Можно ли добавить QR-код и deeplink в конец?</li>
+          <li>Какой текст согласия на ПДн использовать? Юридически кто отвечает?</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ===== SLIDE 5: Анкета новичка ===== -->
+    <section class="slide" data-title="Этап 3: Анкета">
+      <div class="slide-num">Этап 3 из 12</div>
+      <h2>Анкета новичка</h2>
+      <p class="subtitle">Короткие вопросы чтобы понять кто перед нами и какое тестовое выдать.</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+flowchart TD
+    Q1[1\. Имя и контакт<br/>username TG]
+    Q2[2\. Направление работы<br/>выбор из списка]
+    Q3[3\. Уровень опыта<br/>junior/middle/senior]
+    Q4[4\. Опыт работы с ИИ<br/>какие нейронки используешь]
+    Save[(💾 Сохранение в Neon)]
+
+    Q1 --> Q2 --> Q3 --> Q4 --> Save
+    Save --> Next[➡️ Тестовое задание]
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Что делает скелет</h3>
+        <ul>
+          <li>4 жёстких вопроса по очереди, кнопки выбора где можно</li>
+          <li>Сохранение в БД на каждом шаге (можно вернуться)</li>
+          <li>Глобальный <code>/cancel</code> и «Отмена» на любом этапе</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>💪 Что добавляет ИИ-мышца</h3>
+        <ul>
+          <li>Живые уточняющие вопросы («Расскажи подробнее про опыт с ИИ?»)</li>
+          <li>Анализ ответа в свободной форме (вытащить направление из текста)</li>
+          <li>Подбор тестового задания под профиль (а не случайно)</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>❓ Вопросы Дмитрию</summary>
+        <ul>
+          <li>Какие <b>конкретные</b> направления работы предлагаем выбирать? (вайбкодинг? копирайт? дизайн? SMM? аналитика? универсал?)</li>
+          <li>Используем ли уровни junior/middle/senior внутри направления?</li>
+          <li>Что делаем если кандидат вообще не работал с ИИ? Сразу отказ или даём шанс?</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ===== SLIDE 6: Распределение задач (главное архитектурное решение) ===== -->
+    <section class="slide" data-title="Этап 6: Распределение задач">
+      <div class="slide-num">Этап 6 из 12 — Главное архитектурное решение</div>
+      <h2>Распределение задач: <b style="color:#82c91e">кнопки</b> vs <b style="color:#ff6b6b">реакции в чате</b></h2>
+      <p class="subtitle">Наша позиция: уходим от «реакции в общем чате», переходим на адресную рассылку с кнопкой «Принять».</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+flowchart TB
+    Task[📋 Новая задача готова]
+    Task --> Choice{Как распределяем}
+    Choice -->|❌ В документах| ChatPost[Пост в общий чат<br/>«кто первый отреагировал — взял»]
+    Choice -->|✅ Наше предложение| Smart[ИИ выбирает лучшего ассистента<br/>под задачу + загрузка + рейтинг]
+    Smart --> Push[Бот шлёт в ЛИЧКУ<br/>с кнопками Принять / Отказ]
+    Push --> Answer{Ответ за N мин}
+    Answer -->|Принял| Work[🔨 В работе]
+    Answer -->|Отказ / молчит| Next[Следующий ассистент по очереди]
+    Next --> Push
+
+    classDef bad fill:#3a1a1a,stroke:#ff6b6b,stroke-width:2px,color:#ff6b6b
+    classDef good fill:#1a3320,stroke:#82c91e,stroke-width:2px,color:#82c91e
+    class ChatPost bad
+    class Smart,Push good
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Почему кнопки лучше</h3>
+        <ul>
+          <li>✅ <b>Балансировка нагрузки</b> — не «кто первый успел», а кто свободен и подходит</li>
+          <li>✅ <b>ИИ выбирает лучшего</b> по рейтингу и направлению</li>
+          <li>✅ <b>Audit trail</b> — кто отказался, кому переходило</li>
+          <li>✅ <b>Не зависит от того кто залип в чате</b></li>
+          <li>✅ <b>Кандидаты низкого уровня не утаскивают задачи высокого</b></li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>❓ Главный вопрос Дмитрию</summary>
+        <ul>
+          <li><b>Согласен на этот подход?</b> В документах «реакция в чате» — но это для масштаба до 5-10 ассистентов</li>
+          <li>По какому критерию выбирать первого? (FIFO по графику? Лучший рейтинг? Случайно? ИИ-выбор?)</li>
+          <li>Сколько секунд ждать ответ на «Принять/Отказаться»?</li>
+          <li>Что если все отказались? Эскалация Дмитрию?</li>
+          <li>Общий чат оставляем для <b>анонсов</b> (без распределения), или совсем убираем?</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ===== Placeholder: пока показываем что ещё будет ===== -->
+    <section class="slide" data-title="Что ещё будет">
+      <div class="slide-num">Прототип v0.1</div>
+      <h2>Это прототип — что ещё будет</h2>
+      <p class="subtitle">Я сделал первые 6 слайдов чтобы показать концепцию. Если ОК — добью остальные 6-8 этапов.</p>
+
+      <div class="card">
+        <h3>📋 План дальнейших слайдов</h3>
+        <ul>
+          <li>Этап 4: Отборочное тестовое задание (одна задача, не оплачивается на старте)</li>
+          <li>Этап 5: Онбординг — регламент работы, методика ревью</li>
+          <li>Этап 6: 5 стартовых задач (готовый набор от Дмитрия про AI engineering)</li>
+          <li>Этап 7: Формирование стартовой ставки (290 / 270 / 250 / 200 / отказ)</li>
+          <li>Этап 8: Выполнение задачи — лимит, дедлайн, пауза</li>
+          <li>Этап 9: Сдача — 4 документа (чистовик + ошибки + подсказка + ТЗ)</li>
+          <li>Этап 10: <b>Ревью с умышленными ошибками</b> — детальная процедура</li>
+          <li>Этап 11: Спор → судья (третий ассистент)</li>
+          <li>Этап 12: Оплата + еженедельный пересмотр ставки</li>
+          <li>Финал: чек-лист для созвона со всеми вопросами на одной странице</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>🎨 Идеи для UI которые могу добавить</summary>
+        <ul>
+          <li><b>Кликабельные узлы диаграммы</b> — клик по блоку открывает соответствующий <code>&lt;details&gt;</code> ниже</li>
+          <li><b>Раскрашивание этапов</b> — скелет/мышца на каждой диаграмме</li>
+          <li><b>Hover-подсказки</b> — навёл на узел → всплывает мини-описание</li>
+          <li><b>Печать в PDF</b> — кнопка чтобы скачать всё как PDF</li>
+          <li><b>Поделиться ссылкой на конкретный слайд</b> (#slide-6)</li>
+        </ul>
+      </details>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Mermaid init (тёмная тема)
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#1a1f29',
+      primaryColor: '#1f2937',
+      primaryTextColor: '#fff',
+      primaryBorderColor: '#4dabf7',
+      lineColor: '#8896a8',
+      tertiaryColor: '#2a3441',
+      fontSize: '14px'
+    },
+    flowchart: { htmlLabels: true, curve: 'basis' }
+  });
+
+  // Slide navigation
+  const slides = document.querySelectorAll('.slide');
+  const sidebar = document.getElementById('sidebar');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('slide-counter');
+  let currentSlide = 0;
+
+  function buildSidebar() {
+    slides.forEach((s, i) => {
+      const item = document.createElement('a');
+      item.className = 'sidebar-item';
+      item.dataset.idx = i;
+      item.innerHTML = `<span class="num">${i+1}.</span>${s.dataset.title}`;
+      item.onclick = () => showSlide(i);
+      sidebar.appendChild(item);
+    });
+  }
+
+  function showSlide(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    currentSlide = idx;
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    document.querySelectorAll('.sidebar-item').forEach((it, i) =>
+      it.classList.toggle('active', i === idx));
+    progress.style.width = ((idx + 1) / slides.length * 100) + '%';
+    counter.textContent = `${idx + 1} / ${slides.length}`;
+    window.location.hash = 'slide-' + (idx + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderNavButtons();
+  }
+
+  function renderNavButtons() {
+    const slide = slides[currentSlide];
+    let nav = slide.querySelector('.nav');
+    if (nav) nav.remove();
+    nav = document.createElement('div');
+    nav.className = 'nav';
+    nav.innerHTML = `
+      <button ${currentSlide === 0 ? 'disabled' : ''} onclick="showSlide(${currentSlide - 1})">← Назад</button>
+      <button class="next" ${currentSlide === slides.length - 1 ? 'disabled' : ''} onclick="showSlide(${currentSlide + 1})">Далее →</button>
+    `;
+    slide.appendChild(nav);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') showSlide(currentSlide + 1);
+    if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+  });
+
+  // Initial render
+  buildSidebar();
+  // Read hash for direct linking
+  const hashMatch = window.location.hash.match(/slide-(\d+)/);
+  const startIdx = hashMatch ? parseInt(hashMatch[1]) - 1 : 0;
+  showSlide(Math.min(Math.max(startIdx, 0), slides.length - 1));
+</script>
+
+</body>
+</html>
