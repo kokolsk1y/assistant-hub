@@ -199,6 +199,21 @@
   details li { margin-bottom: 8px; color: #c8d1de; }
   details strong { color: #fff; }
 
+  /* Бейджи фаз — какой этап */
+  .phase-badges { margin-bottom: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .phase-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .phase-mvp { background: #1a3320; color: #82c91e; border: 1px solid #2d5a3a; }
+  .phase-d1  { background: #3a2a14; color: #ffa94d; border: 1px solid #5a4220; }
+  .phase-r2  { background: #1a2738; color: #4dabf7; border: 1px solid #2a4a6b; }
+
   /* Подсветки в тексте */
   .hl-good {
     background: #1a3320; color: #82c91e;
@@ -427,6 +442,7 @@ flowchart LR
 
     <!-- SLIDE 4: Proxy-коммуникации -->
     <section class="slide" data-title="Proxy-коммуникации">
+      <div class="phase-badges"><span class="phase-badge phase-r2">🔵 Развитие II</span></div>
       <div class="slide-num">Слайд 4 — Ключевая идея коммуникации</div>
       <h2>Все коммуникации — через платформу</h2>
       <p class="subtitle">Никто не пишет напрямую в личку. Дмитрий работает с дашбордом, ассистенты — с ботом. Платформа посередине доставляет всё.</p>
@@ -491,6 +507,7 @@ flowchart LR
 
     <!-- SLIDE 5: Источники трафика -->
     <section class="slide" data-title="Источники трафика">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span></div>
       <div class="slide-num">Этап 1</div>
       <h2>Источники трафика</h2>
       <p class="subtitle">Откуда приходят кандидаты в воронку.</p>
@@ -544,6 +561,7 @@ flowchart LR
 
     <!-- SLIDE 4: Презентация → Бот -->
     <section class="slide" data-title="Презентация → Бот">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span></div>
       <div class="slide-num">Этап 2</div>
       <h2>Переход из презентации в бот</h2>
       <p class="subtitle">Кандидат прочитал презентацию. Что происходит дальше.</p>
@@ -589,6 +607,7 @@ flowchart LR
 
     <!-- SLIDE 5: Анкета новичка -->
     <section class="slide" data-title="Анкета новичка">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span></div>
       <div class="slide-num">Этап 3</div>
       <h2>Анкета новичка</h2>
       <p class="subtitle">Короткая анкета чтобы понять кто перед нами и какое тестовое задание подобрать.</p>
@@ -642,6 +661,7 @@ flowchart TD
 
     <!-- SLIDE 7: Тестовое отборочное -->
     <section class="slide" data-title="Тестовое отборочное">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span><span class="phase-badge phase-d1">🟡 ИИ-оценка — Доработка I</span></div>
       <div class="slide-num">Этап 4</div>
       <h2>Отборочное тестовое задание</h2>
       <p class="subtitle">Первая «реальная» работа на которой смотрим: справится ли кандидат с конкретной задачей и как использует ИИ.</p>
@@ -696,6 +716,7 @@ flowchart LR
 
     <!-- SLIDE 8: Онбординг -->
     <section class="slide" data-title="Онбординг">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span></div>
       <div class="slide-num">Этап 5</div>
       <h2>Онбординг</h2>
       <p class="subtitle">Кандидат успешно прошёл отборочное. Перед началом «настоящей» работы — короткий онбординг.</p>
@@ -738,6 +759,7 @@ flowchart TD
 
     <!-- SLIDE 9: Стартовые задачи -->
     <section class="slide" data-title="Стартовый пакет">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span></div>
       <div class="slide-num">Этап 6</div>
       <h2>Стартовый пакет задач</h2>
       <p class="subtitle">Серия задач для калибровки: смотрим как ассистент справляется с реальной нагрузкой и определяем стартовую ставку.</p>
@@ -787,6 +809,7 @@ flowchart TD
 
     <!-- SLIDE 10: Распределение задач (главное) -->
     <section class="slide" data-title="Распределение задач">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP (round-robin)</span><span class="phase-badge phase-d1">🟡 Умное — Доработка I</span></div>
       <div class="slide-num">Главное архитектурное решение</div>
       <h2>Распределение задач: <span class="hl-good">кнопки</span> вместо <span class="hl-bad">реакций в чате</span></h2>
       <p class="subtitle">Один из ключевых вопросов на созвон. Наша позиция — отказаться от классической «кто первый отреагировал, тот взял» в пользу адресной рассылки с кнопкой «Принять».</p>
@@ -840,6 +863,7 @@ flowchart TB
 
     <!-- SLIDE 11: Жизненный цикл задачи -->
     <section class="slide" data-title="Жизненный цикл задачи">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP</span></div>
       <div class="slide-num">Этап 8</div>
       <h2>Жизненный цикл задачи</h2>
       <p class="subtitle">Что происходит с задачей после того как ассистент её принял.</p>
@@ -902,6 +926,7 @@ flowchart TD
 
     <!-- SLIDE 12: Ревью (взаимопроверка) -->
     <section class="slide" data-title="Взаимопроверка">
+      <div class="phase-badges"><span class="phase-badge phase-r2">🔵 Развитие II</span></div>
       <div class="slide-num">Этап после сдачи задачи</div>
       <h2>Взаимопроверка (ревью)</h2>
       <p class="subtitle">Согласно методике, каждая задача проходит проверку другим ассистентом. Это даёт дополнительный контроль качества.</p>
@@ -961,6 +986,7 @@ flowchart TD
 
     <!-- SLIDE 13: Оплата и ставки -->
     <section class="slide" data-title="Оплата и ставки">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP (сводка)</span><span class="phase-badge phase-d1">🟡 Автопересмотр — Доработка I</span></div>
       <div class="slide-num">Этап 10</div>
       <h2>Оплата и пересмотр ставки</h2>
       <p class="subtitle">Платформа собирает данные для оплаты автоматически и предлагает изменение ставки на основе метрик.</p>
@@ -1023,6 +1049,7 @@ flowchart LR
 
     <!-- SLIDE 14: Метрики и рост -->
     <section class="slide" data-title="Метрики и рост">
+      <div class="phase-badges"><span class="phase-badge phase-d1">🟡 Доработка I</span><span class="phase-badge phase-r2">🔵 Полные дашборды — Развитие II</span></div>
       <div class="slide-num">Этап 11</div>
       <h2>Метрики и рост ассистента</h2>
       <p class="subtitle">У каждого ассистента есть рейтинг. Раз в неделю смотрим метрики и предлагаем пересмотр ставки.</p>
@@ -1234,6 +1261,7 @@ flowchart LR
 
     <!-- SLIDE 17: Мокапы сообщений бота -->
     <section class="slide" data-title="Мокапы сообщений">
+      <div class="phase-badges"><span class="phase-badge phase-mvp">🟢 MVP (базовые)</span><span class="phase-badge phase-d1">🟡 Шаблоны — Доработка I</span></div>
       <div class="slide-num">Мокапы</div>
       <h2>Как выглядят сообщения бота</h2>
       <p class="subtitle">Примеры реальных сообщений которые будут видеть пользователи.</p>
@@ -1326,6 +1354,7 @@ Telegram-интеграция
 
     <!-- SLIDE 18: Топ улучшений -->
     <section class="slide" data-title="Топ улучшений">
+      <div class="phase-badges"><span class="phase-badge phase-d1">🟡 Доработка I</span><span class="phase-badge phase-r2">🔵 Развитие II</span></div>
       <div class="slide-num">Улучшения</div>
       <h2>Что предлагаем сверх документов</h2>
       <p class="subtitle">5 ключевых идей где можно сделать сильнее чем «как сейчас». Подробности — в IMPROVEMENTS.md.</p>
