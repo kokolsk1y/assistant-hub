@@ -1,0 +1,11 @@
+{
+  "project": "assistant-hub",
+  "mode": "interactive",
+  "granularity": "fine",
+  "parallelization": true,
+  "git_tracking": "incremental",
+  "research_agents": true,
+  "plan_checker": true,
+  "verifier": true,
+  "model_profile": "quality"
+}
