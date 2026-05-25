@@ -1,0 +1,81 @@
+{
+  "project": "Assistant Hub",
+  "updated": "2026-05-25",
+  "tasks": [
+    {
+      "id": 1,
+      "text": "Созвон с Дмитрием для согласования концепции (показываем презентацию https://assistant-hub-7k9p2x.vercel.app через screen share)",
+      "status": "pending",
+      "approved": true,
+      "created": "2026-05-24 22:00"
+    },
+    {
+      "id": 2,
+      "text": "После созвона — заполнить ответы из чек-листа (слайд 20) в site/index.html",
+      "status": "pending",
+      "approved": true,
+      "created": "2026-05-24 22:00"
+    },
+    {
+      "id": 3,
+      "text": "После согласования — обновить PROJECT.md под реальные решения Дмитрия",
+      "status": "pending",
+      "approved": true,
+      "created": "2026-05-24 22:00"
+    },
+    {
+      "id": 4,
+      "text": "Задача M1.1 — установить WSL2 + Python 3.12+ + aiogram 3 (1.5ч)",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-24 22:00",
+      "depends_on": [3]
+    },
+    {
+      "id": 5,
+      "text": "Задача M1.2 — Neon Postgres подключение через asyncpg (1ч)",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-24 22:00",
+      "depends_on": [4]
+    },
+    {
+      "id": 6,
+      "text": "Задача M1.3 — TG-бот через BotFather (dev токен), /start работает (1ч)",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-24 22:00",
+      "depends_on": [4]
+    },
+    {
+      "id": 7,
+      "text": "Починить автодеплой Vercel при push в GitHub (сейчас deploy ручной из site/)",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-24 22:00",
+      "note": "Не критично. Сейчас работает через vercel --prod --yes из site/"
+    },
+    {
+      "id": 8,
+      "text": "Доработать слайд про мокапы сообщений в презентации после первого созвона",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-24 22:00"
+    }
+  ],
+  "completed_summary": {
+    "phase": "Концепция и презентация",
+    "delivered": [
+      "PROJECT.md, ACCESS_REQUESTS.md, README.md",
+      "20-слайдная презентация на Vercel с Mermaid + бейджи фаз",
+      "IMPLEMENTATION_PLAN.md (39-48ч MVP / 30-40ч Доработка / 50-70ч Развитие)",
+      "IMPROVEMENTS.md (15+ идей улучшений + Proxy-коммуникации)",
+      "V2_FEATURES.md (буфер идей)",
+      "4 research-документа (stack/features/architecture/pitfalls)",
+      "ARCHITECTURE_AND_QUESTIONS.md (архив диаграмм)",
+      "GitHub приватный репо, всё закоммичено",
+      "Документы Dmitry прочитаны и проанализированы (в dmitry-docs/, .gitignore)",
+      "Глобальная память Claude обновлена для смены сессий"
+    ]
+  }
+}
