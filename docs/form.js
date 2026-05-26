@@ -16,16 +16,45 @@ const TASK_NAMES = {
 };
 
 const FINAL_PLACEHOLDERS = {
-  '01': `Текст промпта (тот, что в итоге используешь):
+  '01': `ТЕКСТ ПРОМПТА — твоя итоговая инструкция для ИИ.
+Пиши прямо тут, заменяй квадратные скобки [...] на свой текст.
 
+Ты — помощник, который из статьи делает короткое саммари по правилам ниже.
 
-Формат вывода (TL;DR / тезисы / выводы — опиши или скопируй из правил):
+[опиши требования к длине, например: всего ≤200 слов, TL;DR ≤30 слов]
 
+[опиши структуру результата, например: TL;DR + 3 тезиса + 3 вывода]
 
-Стоп-лист (что модель НЕ должна делать):
+[опиши стоп-лист — чего НЕ должно быть в саммари]
 
+Статья для обработки: {{input}}
 
-Переменная для статьи (по умолчанию {{input}}):`,
+——— ФОРМАТ ВЫВОДА ———
+Как должен выглядеть готовый ответ ИИ.
+
+TL;DR: [одно предложение с главной мыслью, не больше 30 слов]
+
+Тезисы:
+1. [первый ключевой тезис из статьи]
+2. [второй ключевой тезис]
+3. [третий ключевой тезис]
+
+Выводы:
+1. [первый практический вывод]
+2. [второй практический вывод]
+3. [третий практический вывод]
+
+——— СТОП-ЛИСТ ———
+Чего НЕ должно появиться в результате (примеры — подправь под себя):
+- имена авторов статьи
+- названия изданий, блогов
+- эмодзи любого вида
+- маркетинговые слова: революционный, уникальный, прорывной
+- свои рекомендации, которых нет в статье
+
+——— МАРКЕР ДЛЯ СТАТЬИ ———
+Оставь как есть, в этот маркер ИИ подставит текст очередной статьи:
+{{input}}`,
 
   '02': `Какие 5 пар выбрал (номера через запятую):
 
@@ -230,13 +259,13 @@ function initAnswerForm(taskNum) {
   </div>
   <div class="form-section">
     <div class="form-label">ФИНАЛ</div>
-    <textarea class="answer-textarea" id="ans-final" rows="14"
-      placeholder="${esc(FINAL_PLACEHOLDERS[nn] || '')}">${esc(savedFinal)}</textarea>
+    <textarea class="answer-textarea" id="ans-final" rows="20"
+      data-template="${esc(FINAL_PLACEHOLDERS[nn] || '')}">${esc(savedFinal || FINAL_PLACEHOLDERS[nn] || '')}</textarea>
   </div>
   <div class="form-section">
     <div class="form-label">ЛОГ</div>
-    <textarea class="answer-textarea" id="ans-log" rows="20"
-      placeholder="${esc(logPh)}">${esc(savedLog)}</textarea>
+    <textarea class="answer-textarea" id="ans-log" rows="24"
+      data-template="${esc(logPh)}">${esc(savedLog || logPh)}</textarea>
   </div>
   <div class="form-actions">
     <button class="save-btn" onclick="saveAndDownload('${nn}')">Сохранить ответ →</button>
@@ -252,6 +281,9 @@ function initAnswerForm(taskNum) {
   const nameEl  = document.getElementById('cand-name');
   const finalEl = document.getElementById('ans-final');
   const logEl   = document.getElementById('ans-log');
+
+  // Помечаем задачу как «открытая» сразу — на главной кружок станет жёлтым.
+  markStarted(nn);
 
   nameEl.addEventListener('input',  () => localStorage.setItem('candidate_name', nameEl.value));
   finalEl.addEventListener('input', () => { localStorage.setItem(`${key}_final`, finalEl.value); markStarted(nn); });
