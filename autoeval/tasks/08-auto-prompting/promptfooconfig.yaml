@@ -1,0 +1,21 @@
+description: "Task 08 — auto-prompting (RICECO)"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Промпт-мастер кандидата подкладывается оркестратором в этот файл.
+# Кандидат сам пишет финальный промпт-мастер, в котором {{input}} —
+# короткое описание задачи на естественном языке.
+prompts:
+  - file://_submission_prompt.txt
+
+# Скрытые кейсы. Каждый — vars + assertions (детерм. + llm-rubric).
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтные настройки для всех тестов: судья — отдельная модель.
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert: []

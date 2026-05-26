@@ -1,0 +1,29 @@
+description: "Task 09 — workflow"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Финальная сдача кандидата (один исполняемый промпт-цепочка) подкладывается
+# оркестратором в этот файл. Внутри сдачи кандидат волен реализовать многошаговый
+# pipeline через chain-of-thought / явные секции / разделители — нам важен
+# финальный черновик ответа от Анны на вход {{input}}.
+prompts:
+  - file://_submission_prompt.txt
+
+# 10 скрытых сквозных кейсов. Каждый = одно входящее сообщение клиента +
+# 4-в-1 llm-rubric (классификация + поля + тон + факты) + опциональный
+# жёсткий contains на дословную цифру из прайса.
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтные ассерты, относящиеся ко всем кейсам.
+# Судья (llm-rubric) использует модель из переменной окружения.
+# Дополнительные 4 балла (2 + 2) считаются оркестратором по
+# interfaces-rubric.md и weak-link-rubric.md — НЕ внутри promptfoo,
+# а в scripts/judge.mjs (для task 09 он подменит стандартную 4-пунктовую
+# рубрику на эти две). См. hidden/README.md и комментарий в scripts/eval.mjs.
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert: []

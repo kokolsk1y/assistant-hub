@@ -1,0 +1,32 @@
+description: "Task 05 — context-pack (Anna Petrova, candidate run)"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Промпт кандидата (его контекст-пак) подкладывается оркестратором в этот файл.
+# Кандидат сам пишет финальный контекст-пак — оркестратор берёт его из ### ФИНАЛ блока сдачи.
+prompts:
+  - file://_submission_prompt.txt
+
+# Скрытые кейсы. Каждый — vars (input) + assertions.
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтные ассерты ко всем кейсам:
+# — Стоп-лист маркетинговых оборотов (Анна их не использует).
+# — Судья настраивается на фиксированную модель для стабильности.
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert:
+    - type: not-contains
+      value: "уникальн"
+    - type: not-contains
+      value: "эксклюзивн"
+    - type: not-contains
+      value: "прорывн"
+    - type: not-contains
+      value: "трансформац"
+    - type: not-contains
+      value: "раскрыть потенциал"

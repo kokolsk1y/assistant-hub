@@ -1,0 +1,19 @@
+{
+  "name": "assistant-hub-autoeval",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Автопроверка тестовых заданий курса-теста для бизнес-ассистентов (9 задач)",
+  "scripts": {
+    "eval": "node scripts/eval.mjs",
+    "judge": "node scripts/judge.mjs",
+    "test-all": "node scripts/test-all.mjs"
+  },
+  "dependencies": {
+    "promptfoo": "^0.121.12",
+    "js-yaml": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

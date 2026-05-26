@@ -1,0 +1,22 @@
+description: "Task 06 — anti-hallucination"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Промпт кандидата подкладывается оркестратором в _submission_prompt.txt.
+# Кандидат сам пишет финальный промпт; оркестратор подставляет переменные {{notes}} и {{input}}.
+# {{notes}} — содержимое training/notes.md, одинаково для всех кейсов.
+# {{input}} — вопрос из конкретного кейса.
+prompts:
+  - file://_submission_prompt.txt
+
+# Скрытые кейсы. 8 «находит» + 8 «молчит» — парная шкала разбирается оркестратором по префиксу description.
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтные ассерты, относящиеся ко всем кейсам.
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert: []

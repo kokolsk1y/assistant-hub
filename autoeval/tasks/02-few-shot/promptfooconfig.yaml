@@ -1,0 +1,20 @@
+description: "Task 02 — few-shot"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Промпт кандидата подкладывается оркестратором в этот файл.
+# В промпте должны быть {{input}} как переменная — оркестратор подставит черновик из кейса.
+prompts:
+  - file://_submission_prompt.txt
+
+# Скрытые кейсы. Каждый — vars + assertions.
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтные опции — провайдер для llm-rubric.
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert: []

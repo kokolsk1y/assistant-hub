@@ -1,0 +1,21 @@
+description: "Task 03 — system-rules (КодШкола Старт: дух vs буква правил)"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Промпт кандидата (системный промпт его сборки) подкладывается оркестратором
+# в этот файл. Кандидат сам пишет финальный системный промпт — мы только
+# подмешиваем переменную {{input}} (сообщение клиента).
+prompts:
+  - file://_submission_prompt.txt
+
+# Скрытые кейсы. Каждый — vars + assertions.
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтные ассерты, которые относятся ко всем кейсам (применяются ко всему).
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert: []

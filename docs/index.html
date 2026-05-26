@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Курс-тест для ассистентов</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2a2a2a;
+    background: #fafaf8;
+    margin: 0;
+    padding: 32px 20px;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px 48px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  h1 { font-size: 28px; font-weight: 700; margin: 0 0 8px; color: #1a1a1a; }
+  .subtitle { color: #666; font-size: 16px; margin: 0 0 32px; }
+  .how-to {
+    background: #f7f6f2; border-radius: 8px;
+    padding: 20px 24px; margin-bottom: 32px;
+  }
+  .how-to h2 { font-size: 16px; font-weight: 600; margin: 0 0 12px; }
+  .how-to ol { margin: 0; padding-left: 20px; }
+  .how-to li { margin: 6px 0; }
+  .task-list { list-style: none; padding: 0; margin: 0; }
+  .task-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0ede8;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #4a8a5a; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; flex-shrink: 0;
+  }
+  .task-info { flex: 1; }
+  .task-name { font-weight: 600; color: #1a1a1a; font-size: 15px; }
+  .task-skill { font-size: 13px; color: #888; margin-top: 2px; }
+  .task-time { font-size: 13px; color: #aaa; white-space: nowrap; }
+  .task-item a {
+    text-decoration: none; color: inherit; display: flex;
+    align-items: center; gap: 16px; width: 100%;
+  }
+  .task-item a:hover .task-name { color: #4a8a5a; }
+  .task-status {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid #e0ddd6; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #4a8a5a; font-weight: 700;
+  }
+  .task-status.done { background: #4a8a5a; border-color: #4a8a5a; color: #fff; }
+  .task-status.started { border-color: #d4a017; }
+  .name-banner {
+    background: #f0f6f0; border: 1px solid #c8d6c8;
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .name-banner label { font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .name-banner input {
+    flex: 1; padding: 8px 12px; border: 1px solid #c8c4bc;
+    border-radius: 5px; font-size: 15px; font-family: inherit;
+  }
+  .name-banner input:focus { outline: none; border-color: #4a8a5a; }
+  .note {
+    background: #fdf6e8; border-left: 4px solid #d4a017;
+    padding: 14px 18px; border-radius: 4px; margin-top: 28px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Курс-тест для ассистентов</h1>
+  <p class="subtitle">9 практических задач по настройке ИИ-ассистентов. Время: 6-9 часов.</p>
+
+  <div class="name-banner">
+    <label for="idx-name">Твоё имя и фамилия:</label>
+    <input type="text" id="idx-name" placeholder="Иван Петров" autocomplete="name">
+  </div>
+
+  <div class="how-to">
+    <h2>Как проходить</h2>
+    <ol>
+      <li>Открой задачу, прочитай сценарий и шаги. Внутри — материалы для тренировки.</li>
+      <li>Скачай шаблон ответа, заполни две секции: ФИНАЛ и ЛОГ.</li>
+      <li>Когда сделаешь все 9 — собери файлы в папку, сожми в ZIP и отправь.</li>
+    </ol>
+  </div>
+
+  <ul class="task-list">
+    <li class="task-item" data-task="01">
+      <a href="task-01-саммари.html">
+        <div class="task-num">1</div>
+        <div class="task-info">
+          <div class="task-name">Саммари статей</div>
+          <div class="task-skill">Стабильные промпты для повторяющихся задач</div>
+        </div>
+        <div class="task-time">~40-60 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="02">
+      <a href="task-02-few-shot.html">
+        <div class="task-num">2</div>
+        <div class="task-info">
+          <div class="task-name">Подбор примеров для few-shot</div>
+          <div class="task-skill">Подбор примеров для обучения модели</div>
+        </div>
+        <div class="task-time">~40-60 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="03">
+      <a href="task-03-системный-промпт.html">
+        <div class="task-num">3</div>
+        <div class="task-info">
+          <div class="task-name">Системный промпт</div>
+          <div class="task-skill">Системный промпт, который держит дух правил</div>
+        </div>
+        <div class="task-time">~40-60 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="04">
+      <a href="task-04-json-отладка.html">
+        <div class="task-num">4</div>
+        <div class="task-info">
+          <div class="task-name">Отладка JSON-экстрактора</div>
+          <div class="task-skill">Точечная отладка чужих промптов</div>
+        </div>
+        <div class="task-time">~40-60 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="05">
+      <a href="task-05-контекст-пак-Анна.html">
+        <div class="task-num">5</div>
+        <div class="task-info">
+          <div class="task-name">Контекст-пак под Анну</div>
+          <div class="task-skill">Контекст-инжиниринг — модель отвечает «как ты»</div>
+        </div>
+        <div class="task-time">~50-70 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="06">
+      <a href="task-06-без-выдумок.html">
+        <div class="task-num">6</div>
+        <div class="task-info">
+          <div class="task-name">Помощник без выдумок</div>
+          <div class="task-skill">Помощник, который не выдумывает (grounding)</div>
+        </div>
+        <div class="task-time">~40-60 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="07">
+      <a href="task-07-уточняющие-вопросы.html">
+        <div class="task-num">7</div>
+        <div class="task-info">
+          <div class="task-name">Уточняющие вопросы</div>
+          <div class="task-skill">ИИ, который сначала уточняет, потом делает</div>
+        </div>
+        <div class="task-time">~40-60 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="08">
+      <a href="task-08-промпт-мастер.html">
+        <div class="task-num">8</div>
+        <div class="task-info">
+          <div class="task-name">Промпт-мастер RICECO</div>
+          <div class="task-skill">Промпт-мастер по формуле RICECO</div>
+        </div>
+        <div class="task-time">~50-70 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+    <li class="task-item" data-task="09">
+      <a href="task-09-воркфлоу-финал.html">
+        <div class="task-num">9</div>
+        <div class="task-info">
+          <div class="task-name">Сборка воркфлоу</div>
+          <div class="task-skill">Сборка ИИ-конвейера из шагов</div>
+        </div>
+        <div class="task-time">~60-80 мин</div>
+        <div class="task-status" data-status></div>
+      </a>
+    </li>
+  </ul>
+
+  <div class="note">
+    Заголовки секций в шаблонах (### ФИНАЛ и ### ЛОГ) не переименовывай — они нужны для проверки.
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // Загрузить имя кандидата
+  const nameEl = document.getElementById('idx-name');
+  const saved = localStorage.getItem('candidate_name') || '';
+  if (saved) nameEl.value = saved;
+  nameEl.addEventListener('input', () => localStorage.setItem('candidate_name', nameEl.value));
+
+  // Прогресс задач
+  document.querySelectorAll('.task-item[data-task]').forEach(li => {
+    const nn = li.getAttribute('data-task');
+    const circle = li.querySelector('[data-status]');
+    if (!circle) return;
+    if (localStorage.getItem('task_' + nn + '_saved')) {
+      circle.classList.add('done'); circle.textContent = '✓';
+    } else if (localStorage.getItem('task_' + nn + '_started')) {
+      circle.classList.add('started'); circle.title = 'В процессе';
+    }
+  });
+})();
+</script></body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Как сдавать курс-тест</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: #2a2a2a;
+    background: #fafaf8;
+    margin: 0;
+    padding: 32px 20px;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 48px 56px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    color: #1a1a1a;
+    letter-spacing: -0.3px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 40px 0 14px;
+    color: #1a1a1a;
+  }
+  .intro {
+    color: #4a4a4a;
+    font-size: 17px;
+    margin: 0 0 8px;
+  }
+  .steps {
+    display: grid;
+    gap: 16px;
+    margin: 28px 0 8px;
+  }
+  .step {
+    background: #fafaf6;
+    border: 1px solid #ebe8e0;
+    border-radius: 8px;
+    padding: 22px 26px;
+  }
+  .step-num {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #4a8a5a;
+    margin-bottom: 6px;
+  }
+  .step-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px;
+  }
+  .step p {
+    margin: 6px 0;
+    color: #3a3a3a;
+  }
+  ul {
+    padding-left: 22px;
+    margin: 10px 0;
+  }
+  ul li {
+    margin: 6px 0;
+    color: #3a3a3a;
+  }
+  code {
+    background: #f0f2f5;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    color: #2a2a2a;
+  }
+  .note {
+    background: #f0f6f0;
+    border-left: 4px solid #4a8a5a;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin: 16px 0;
+    color: #2a4a2a;
+  }
+  .small {
+    color: #888;
+    font-size: 13px;
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid #ebe8e0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Как сдавать курс-тест</h1>
+  <p class="intro">Привет. Перед тобой короткий курс из 9 задач про настройку ИИ под работу ассистента. Здесь всё, что нужно знать, чтобы пройти его без суеты.</p>
+
+  <h2>Три шага</h2>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">Шаг 1</div>
+      <div class="step-title">Открой задание</div>
+      <p>В этой папке лежат файлы <code>task-1-...html</code> ... <code>task-9-...html</code>. Дважды кликни на любой — откроется в браузере. Внутри сценарий, материалы и план действий.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-num">Шаг 2</div>
+      <div class="step-title">Заполни шаблон ответа</div>
+      <p>Рядом с каждой задачей лежит <code>шаблон-ответа-задача-N.md</code>. Скопируй его, открой в любом текстовом редакторе и заполни поля. Внутри две секции — <code>### ФИНАЛ</code> (готовый промпт) и <code>### ЛОГ</code> (как ты к нему пришёл). Заголовки секций оставь как есть — по ним мы соберём результат.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-num">Шаг 3</div>
+      <div class="step-title">Собери в архив и пришли</div>
+      <p>Назови каждый файл <code>task-N-имя-фамилия.md</code> (например, <code>task-1-ivan-petrov.md</code>). Положи все ответы в одну папку, запакуй в zip с именем <code>сдача-имя-фамилия.zip</code> и отправь тому, кто прислал тебе курс — в Telegram или ссылкой на Диск.</p>
+    </div>
+
+  </div>
+
+  <h2>Что нужно знать заранее</h2>
+  <ul>
+    <li>Задачи можно проходить в любом порядке — выбирай, какая интересна.</li>
+    <li>Таймера нет. Хочешь — за вечер, хочешь — за неделю. И то и другое нормально.</li>
+    <li>ИИ разрешён любой: ChatGPT, Claude, Gemini, что удобно. Это не чит, а часть навыка.</li>
+    <li>Если по какой-то задаче решил не отвечать — просто пропусти её, пустой файл не нужен.</li>
+  </ul>
+
+  <h2>Как мы будем оценивать</h2>
+  <p>За каждую задачу ты получаешь балл от 0 до 10. В итоге собирается профиль из 9 баллов — не одна общая оценка, а картина по разным навыкам работы с ИИ. Так видно, что у тебя получается уверенно, а что стоит подтянуть.</p>
+
+  <h2>Бонус</h2>
+  <div class="note">
+    После прохождения курса ты получаешь сертификат — даже если итоговый профиль слабый. Навыки, которые ты прокачаешь по дороге, пригодятся в любой работе, где есть ИИ.
+  </div>
+
+  <p class="small">Если что-то непонятно — напиши тому, кто прислал тебе курс. Уточнить до сдачи лучше, чем после.</p>
+
+</div>
+</body>
+</html>

@@ -128,3 +128,18 @@ tmp/
 *.bak
 *.orig
 *.rej
+
+# ===== AUTOEVAL — скрытые тест-сеты =====
+# Каркас механизма коммитим, конкретные кейсы с эталонами — нет,
+# чтобы кандидаты не подсмотрели в репо.
+autoeval/tasks/*/hidden/
+autoeval/submissions/
+autoeval/output/
+# Временные файлы прогонов (с уникальным runId-суффиксом)
+autoeval/tasks/*/_submission_prompt*
+autoeval/tasks/*/_resolved_promptfooconfig*
+autoeval/tasks/*/_eval_result*
+autoeval/fixtures/*/*.report.json
+# Локальные artifacts promptfoo
+autoeval/.promptfoo/
+.promptfoo/

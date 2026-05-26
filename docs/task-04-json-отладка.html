@@ -1,0 +1,412 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Задача 4. Отладка чужого промпта</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2a2a2a;
+    background: #fafaf8;
+    margin: 0;
+    padding: 32px 20px;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px 48px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  /* Прогресс-бар */
+  .progress { margin-bottom: 32px; }
+  .progress-label { font-size: 13px; color: #888; margin-bottom: 8px; }
+  .progress-dots { display: flex; gap: 8px; }
+  .dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #e8e6e0; border: 2px solid transparent;
+  }
+  .dot.done { background: #4a8a5a; }
+  .dot.current { background: #fff; border-color: #4a8a5a; }
+  /* Время */
+  .time-estimate { color: #888; font-size: 14px; margin-bottom: 28px; }
+  /* Заголовки */
+  h1 { font-size: 28px; font-weight: 700; margin: 0 0 8px; color: #1a1a1a; }
+  h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; color: #1a1a1a; }
+  h3 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
+  /* Свёрнутый блок */
+  details {
+    background: #fafaf6; border: 1px solid #ebe8e0;
+    border-radius: 6px; padding: 14px 18px; margin: 16px 0;
+  }
+  details summary {
+    cursor: pointer; font-weight: 600; color: #1a1a1a;
+  }
+  details details {
+    background: #fff; margin: 12px 0;
+  }
+  /* Блок "Если застрял" */
+  .stuck {
+    background: #fdf6e8; border-left: 4px solid #d4a017;
+    padding: 16px 20px; border-radius: 4px; margin: 20px 0;
+  }
+  .stuck ul { margin: 8px 0; padding-left: 20px; }
+  .stuck li { margin: 8px 0; }
+  /* Короткий путь */
+  .shortcut {
+    background: #f0f6f0; border-left: 4px solid #4a8a5a;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  /* Совет дня */
+  .tip-of-day {
+    position: fixed; top: 24px; right: 24px;
+    max-width: 220px; background: #fff;
+    border: 1px solid #ebe8e0; border-radius: 6px;
+    padding: 12px 14px; font-size: 13px; color: #555;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .tip-of-day .tip-label {
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #888; margin-bottom: 4px;
+  }
+  @media (max-width: 1100px) { .tip-of-day { display: none; } }
+  /* Бейдж навыка */
+  .skill-badge {
+    background: linear-gradient(135deg, #f0f6f0, #e8eee8);
+    border: 1px solid #c8d6c8; border-radius: 8px;
+    padding: 16px 20px; margin: 20px 0; text-align: center;
+  }
+  .skill-label {
+    font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #4a8a5a;
+    margin-bottom: 4px;
+  }
+  .skill-name { font-size: 18px; font-weight: 600; color: #2a4a2a; }
+  /* Кнопка скачать */
+  .template-btn {
+    display: inline-block; background: #1a1a1a; color: #fff;
+    padding: 14px 24px; border-radius: 6px;
+    text-decoration: none; font-weight: 600; font-size: 15px;
+    margin: 24px 0;
+  }
+  .template-btn:hover { background: #333; }
+  /* Подвал */
+  .footer-nav {
+    display: flex; justify-content: space-between;
+    margin-top: 40px; padding-top: 20px;
+    border-top: 1px solid #ebe8e0;
+  }
+  .footer-nav a {
+    color: #4a4a4a; text-decoration: none; font-size: 14px;
+  }
+  .footer-nav a:hover { color: #1a1a1a; }
+  /* Код и таблицы внутри материалов */
+  pre {
+    background: #0d1117; color: #e6edf3;
+    padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto;
+    font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px; line-height: 1.5;
+    margin: 8px 0; white-space: pre;
+  }
+  code {
+    font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px; background: #f3f4f6;
+    padding: 1px 5px; border-radius: 3px;
+  }
+  pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  th, td { border: 1px solid #d0d7de; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #f6f8fa; font-weight: 600; }
+  .letter-block {
+    background: #f6f8fa; border: 1px solid #d0d7de;
+    border-radius: 6px; padding: 14px 16px; margin: 12px 0;
+  }
+  .letter-block .label {
+    font-size: 12px; color: #57606a;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+  }
+  .letter-block .body {
+    background: #ffffff; border: 1px solid #e1e4e8;
+    border-radius: 4px; padding: 10px 12px;
+    font-family: Georgia, serif; font-size: 14px;
+    white-space: pre-wrap; margin-bottom: 10px;
+  }
+  .letter-block .gold-label {
+    font-size: 12px; color: #57606a;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin: 8px 0 6px 0;
+  }
+  .gold-json {
+    background: #0d1117; color: #e6edf3;
+    padding: 10px 12px; border-radius: 4px;
+    font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 12px; overflow-x: auto;
+    white-space: pre-wrap; word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+<div class="tip-of-day">
+  <div class="tip-label">Совет</div>
+  Чужой промпт чинят строчкой, а не переписыванием. Сломать рабочее — хуже, чем не починить сломанное.
+</div>
+
+<div class="container">
+
+  <div class="progress">
+    <div class="progress-label">Задача 4 из 9</div>
+    <div class="progress-dots">
+      <span class="dot done"></span>
+      <span class="dot done"></span>
+      <span class="dot done"></span>
+      <span class="dot current"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+
+  <h1>Задача 4. Отладка чужого промпта</h1>
+  <p class="time-estimate">Время на задачу: ~50-70 минут</p>
+
+  <p>В работе ассистента часто приходится не писать с нуля, а чинить чужое: промпт от коллеги, который «почти работает», шаблон автоматизации, чек-лист. Навык отладки — посмотреть на текст и понять, какая фраза сбивает модель — экономит часы и сохраняет рабочую часть. Сегодня тренируешь именно это: правишь точечно, не ломая то, что уже идёт.</p>
+
+  <h2>Сценарий</h2>
+  <p>Ты пришёл в небольшое агентство. У них работает ИИ-экстрактор: из писем-заявок вытаскивает поля в JSON-формат (структура данных типа карточки с полями: имя, телефон, сумма) — имя, компания, контакт, сумма, срок, флаг срочности. Половина писем разбирается криво, CRM падает на парсинге. Автор промпта ушёл. Переписывать с нуля — потерять рабочую часть. В промпте 4 дефекта, они не помечены. Твоя задача — найти все, понять причину каждого и починить точечно.</p>
+
+  <details>
+    <summary>Посмотреть материалы для тренировки</summary>
+
+    <details open>
+      <summary>JSON-схема извлекаемых полей</summary>
+      <p>Все письма-заявки разбираются в один JSON из 6 полей.</p>
+      <table>
+        <thead>
+          <tr><th>Поле</th><th>Тип</th><th>Описание</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>name</code></td>
+            <td><code>string | null</code></td>
+            <td>Имя клиента (в именительном падеже, если можно). Если в письме имени нет — <code>null</code>.</td>
+          </tr>
+          <tr>
+            <td><code>company</code></td>
+            <td><code>string | null</code></td>
+            <td>Название компании клиента. Если клиент пишет от себя как физлицо — <code>null</code>.</td>
+          </tr>
+          <tr>
+            <td><code>contact</code></td>
+            <td><code>string | null</code></td>
+            <td>Контакт для связи: email или телефон. Если нет ни того, ни другого — <code>null</code>. Email предпочтительнее телефона, если указаны оба.</td>
+          </tr>
+          <tr>
+            <td><code>amount</code></td>
+            <td><code>number | null</code></td>
+            <td>Сумма заявки в рублях. Число, без валюты, без пробелов, без копеек. Если суммы нет — <code>null</code>. Если упомянуты две суммы («было 80000, прошу скидку до 50000», «вилка от 30000 до 50000») — берётся та, которую клиент в итоге просит/предлагает заплатить, то есть финальная/нижняя/целевая.</td>
+          </tr>
+          <tr>
+            <td><code>deadline</code></td>
+            <td><code>string | null</code></td>
+            <td>Срок в формате <code>YYYY-MM-DD</code>. Сегодня условно — <code>2026-05-26</code>. Размытый срок («на следующей неделе») — приводи к конкретной дате. Если срока нет — <code>null</code>.</td>
+          </tr>
+          <tr>
+            <td><code>urgent</code></td>
+            <td><code>boolean</code></td>
+            <td><code>true</code>, если явно сказано «срочно», «как можно быстрее», «горит», «вчера надо было», «asap», либо если срок &lt; 3 дней от сегодняшней даты. Иначе <code>false</code>. Всегда <code>true</code> или <code>false</code>, никогда не <code>null</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Формат вывода</h3>
+      <ul>
+        <li>Один JSON-объект.</li>
+        <li>Без markdown-обёрток (никаких тройных бэктиков вокруг).</li>
+        <li>Без комментариев до или после.</li>
+        <li>Никаких лишних полей.</li>
+      </ul>
+
+      <h3>Эталонный пример</h3>
+      <p>Письмо:</p>
+      <pre><code>Здравствуйте! Меня зовут Анна, ИП Кузнецова. Нужен лендинг для нового продукта.
+Бюджет до 120000 рублей. Срок — к 15 июня 2026. Почта: anna.k@mail.ru</code></pre>
+      <p>JSON:</p>
+      <pre><code>{"name": "Анна Кузнецова", "company": "ИП Кузнецова", "contact": "anna.k@mail.ru", "amount": 120000, "deadline": "2026-06-15", "urgent": false}</code></pre>
+    </details>
+
+    <details>
+      <summary>Сломанный промпт (текущая прод-версия)</summary>
+      <p>Это текст, который сейчас крутится в экстракторе. В нём 4 дефекта. Запятые и переносы строк — как есть, не правь форматирование, просто разберись где формулировка сбивает модель.</p>
+<pre><code>Ты — помощник по обработке входящих заявок. Из текста письма-заявки извлекай ключевые поля и возвращай их в формате JSON.
+
+Поля, которые надо найти:
+- name — имя клиента
+- company — название компании
+- contact — email или телефон для связи
+- amount — сумма заявки в рублях (число)
+- deadline — срок исполнения в формате YYYY-MM-DD (сегодня 2026-05-26)
+- urgent — true/false: срочно ли (явные слова «срочно», «горит», «asap», либо срок меньше 3 дней)
+
+Старайся понять контекст и извлечь поля максимально полно. Если поле явно не указано — постарайся вывести его из контекста письма (например, если человек пишет с корпоративной почты — название компании можно угадать из домена, если упомянул «срочно нужно к выходным» — посчитай дату).
+
+Если в письме что-то непонятно или неоднозначно — обязательно поясни в ответе, как ты принял решение, чтобы человек на той стороне понимал твою логику.
+
+Сумма — это число в рублях. Не пиши «руб» или «р.», только число.
+
+Верни результат в виде JSON.
+
+Пример:
+{
+  "name": "Иван Петров",
+  "company": "ООО Ромашка",
+  "contact": "ivan@romashka.ru",
+  "amount": 50000,
+  "deadline": "2026-06-01",
+  "urgent": false
+}
+
+Письмо для обработки:
+{{input}}</code></pre>
+    </details>
+
+    <details>
+      <summary>8 тренировочных писем с эталонами</summary>
+      <p>Прогоняй промпт на каждом письме и сравнивай с эталоном. Сегодня условно — <strong>2026-05-26</strong>.</p>
+
+      <div class="letter-block">
+        <div class="label">Письмо 1</div>
+        <div class="body">Здравствуйте. Подскажите, делаете ли вы лендинги для онлайн-школ?
+Если да — пришлите примеры работ и прайс.
+Спасибо.</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": null, "company": null, "contact": null, "amount": null, "deadline": null, "urgent": false}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 2</div>
+        <div class="body">Добрый день! Меня зовут Ольга. Нужна помощь с настройкой контекстной рекламы.
+Контакт для связи: olga.makarova89@yandex.ru</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": "Ольга", "company": null, "contact": "olga.makarova89@yandex.ru", "amount": null, "deadline": null, "urgent": false}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 3</div>
+        <div class="body">Хочу заказать у вас дизайн упаковки. Бюджет — около 80, но могу подвинуться вверх если будет хорошо.
+Срок — желательно поскорее. Я Дмитрий из «Кофейни на Ленина».
+Телефон 8-915-234-12-34.</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": "Дмитрий", "company": "Кофейня на Ленина", "contact": "8-915-234-12-34", "amount": 80000, "deadline": null, "urgent": false}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 4</div>
+        <div class="body">Здравствуйте. Студия Studio Alfa ищет SMM-щика на постоянку. Подробности обсудим, пишите на info@studio-alfa.ru.
+Бюджет обсуждаемый.</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": null, "company": "Studio Alfa", "contact": "info@studio-alfa.ru", "amount": null, "deadline": null, "urgent": false}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 5</div>
+        <div class="body">Привет! Я Марина, репетитор английского. Хочу заказать у вас сайт-визитку.
+В прошлом году мне делали за 60000, но это много для меня. Готова заплатить 35000, не больше.
+Срок — к 1 июля. Связь через марина@inglish.pro.</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": "Марина", "company": null, "contact": "марина@inglish.pro", "amount": 35000, "deadline": "2026-07-01", "urgent": false}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 6</div>
+        <div class="body">Здравствуйте! ООО «Светлый путь», нужен ремонт офиса.
+Изначально подрядчик называл 450000, но мы просим скидку до 380000 — больше у нас в бюджете нет.
+Срок — до 20 июня. Контакт: prorab@svetly-put.ru. Срочно — у нас приёмка 25 июня.</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": null, "company": "ООО Светлый путь", "contact": "prorab@svetly-put.ru", "amount": 380000, "deadline": "2026-06-20", "urgent": true}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 7 (типовое — не должно сломаться)</div>
+        <div class="body">Добрый день. Меня зовут Алексей Воронов, представляю ООО «ТехноСервис».
+Нужна доставка партии оборудования из Москвы в Казань. Бюджет 120000 рублей, срок — до 5 июня 2026.
+Свяжитесь со мной: a.voronov@tehnoservice.ru</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": "Алексей Воронов", "company": "ООО ТехноСервис", "contact": "a.voronov@tehnoservice.ru", "amount": 120000, "deadline": "2026-06-05", "urgent": false}</div>
+      </div>
+
+      <div class="letter-block">
+        <div class="label">Письмо 8 (типовое — не должно сломаться)</div>
+        <div class="body">Здравствуйте! Я Елена, ИП Соколова. Нужно настроить CRM — Битрикс24.
+Бюджет 75000 рублей. Срок не критичен, в течение месяца. Почта elena@sokolova-biz.ru, телефон +7-916-555-77-88.</div>
+        <div class="gold-label">Эталон</div>
+        <div class="gold-json">{"name": "Елена Соколова", "company": "ИП Соколова", "contact": "elena@sokolova-biz.ru", "amount": 75000, "deadline": "2026-06-26", "urgent": false}</div>
+      </div>
+
+      <p>Подсказка: один из 4 дефектов проявляется не на конкретном письме, а на формате вывода в целом. Прогони промпт несколько раз на одном письме — увидишь, что иногда приходит не чистый JSON.</p>
+    </details>
+
+  </details>
+
+  <h2>Что нужно сделать</h2>
+  <ol>
+    <li>Открой материалы выше и скопируй сломанный промпт.</li>
+    <li>Прогони его на 8 тренировочных письмах и сравни с эталонами.</li>
+    <li>Найди, на каких письмах сыпется и какая фраза в промпте за это отвечает.</li>
+    <li>Почини точечно — правь конкретную фразу, не переписывай рабочие куски.</li>
+    <li>Перепроверь починенный промпт на всех 8 письмах: сломанное чинится, рабочее не сломалось.</li>
+    <li>Открой шаблон ответа и заполни две секции.</li>
+  </ol>
+
+  <div class="stuck">
+    <h3>Если застрял</h3>
+    <ul>
+      <li>Не понимаешь, почему модель выдала странный JSON на письме N — попроси ИИ: <code>«Вот промпт и вот письмо. Объясни по строкам промпта, какая инструкция заставила тебя выдать именно такой JSON»</code>.</li>
+      <li>Нашёл расхождение, но не понимаешь причину — скажи: <code>«Вот сломанный промпт и эталон. На письме N модель выдала Y вместо Z. Какая фраза в промпте за это отвечает?»</code></li>
+      <li>Знаешь что чинить, но не уверен в формулировке — попроси: <code>«Перепиши только эту строку промпта так, чтобы модель в случае X делала Y. Остальное не трогай»</code>.</li>
+      <li>Кажется, что починил — но не уверен — прогони на письмах 7 и 8. Они типовые. Если на них что-то поплыло — починка не точечная.</li>
+      <li>Один из дефектов не привязан к конкретному письму — прогони один и тот же промпт на одном письме 3-4 раза подряд. Смотри не на содержание, а на форму ответа.</li>
+    </ul>
+  </div>
+
+  <div class="shortcut">
+    <h3>Короткий путь</h3>
+    <p>Если не хочешь искать дефекты глазами — скопируй промпт и 8 писем в чат с ИИ одним сообщением и попроси: <code>«Прогони промпт на каждом письме, сравни с эталоном, выпиши таблицу расхождений и для каждого предположи, какая фраза промпта виновата»</code>. Это нормальный подход. Дальше думай сам — какие из предположений ИИ верны и как формулировать починку.</p>
+  </div>
+
+  <h2>Что прислать</h2>
+  <p>Один файл с двумя секциями. В <strong>ФИНАЛ</strong> — починенный промпт целиком. В <strong>ЛОГ</strong> — по каждому из 4 дефектов: симптом, причина, починка, замер до и после.</p>
+  <a class="template-btn" href="шаблон-ответа-задача-04.md" download>
+    Скачать шаблон ответа →
+  </a>
+
+  <h2>Как оценим</h2>
+  <p>6 баллов — автопроверка финала на 25 скрытых письмах. 4 балла — за качество лога: нашёл все 4 дефекта, объяснил причины как механизм, чинил точечно. Итого 10.</p>
+
+  <h2>Когда сдашь</h2>
+  <p>Отладка чужого промпта — то, что ассистент делает почти каждую неделю. После этой задачи ты увидишь промпт не как «инструкцию модели», а как набор фраз, каждая из которых отвечает за конкретное поведение. Поправил одну — проверил, что соседнее не поплыло.</p>
+
+  <div class="skill-badge">
+    <div class="skill-label">Навык освоен</div>
+    <div class="skill-name">Точечная отладка чужих промптов</div>
+  </div>
+
+  <div class="footer-nav">
+    <a href="task-03-системный-промпт.html">← Предыдущая задача</a>
+    <a href="index.html">Все задачи</a>
+    <a href="task-05-контекст-пак-Анна.html">Следующая задача →</a>
+  </div>
+
+</div>
+
+<script src="form.js"></script>
+<script>initAnswerForm(4);</script>
+</body>
+</html>

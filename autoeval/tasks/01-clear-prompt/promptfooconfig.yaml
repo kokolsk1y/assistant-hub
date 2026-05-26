@@ -1,0 +1,19 @@
+description: "Task 01 — clear-prompt summarizer"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Промпт кандидата подкладывает оркестратор: вырезает блок ### ФИНАЛ / ### FINAL
+# из сдачи и сохраняет его в _submission_prompt.txt в этой же папке.
+prompts:
+  - file://_submission_prompt.txt
+
+# Скрытые кейсы — массив из 20 синтетических статей с ассертами.
+tests:
+  - file://hidden/tests.yaml
+
+# Дефолтный judge для llm-rubric (общий для всех llm-rubric-ассертов в кейсах).
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}

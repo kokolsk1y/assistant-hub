@@ -1,0 +1,30 @@
+description: "Task 05 — context-pack (Anna Petrova, BASELINE run — пустой пак)"
+
+providers:
+  - id: ${PROMPTFOO_TARGET_MODEL}
+
+# Baseline-промпт: универсальный карьерный консультант без фактов Анны.
+# Тот же тест-сет, но прогоняется ПРОТИВ пустого пака, чтобы измерить дельту.
+prompts:
+  - file://hidden/baseline-prompt.txt
+
+# Тот же скрытый тест-сет, что и в кандидатском прогоне.
+tests:
+  - file://hidden/tests.yaml
+
+# Те же дефолтные ассерты и тот же судья — для честного сравнения.
+defaultTest:
+  options:
+    provider:
+      id: ${PROMPTFOO_JUDGE_MODEL}
+  assert:
+    - type: not-contains
+      value: "уникальн"
+    - type: not-contains
+      value: "эксклюзивн"
+    - type: not-contains
+      value: "прорывн"
+    - type: not-contains
+      value: "трансформац"
+    - type: not-contains
+      value: "раскрыть потенциал"
