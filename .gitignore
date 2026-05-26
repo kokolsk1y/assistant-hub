@@ -1,56 +1,130 @@
-# Документы Дмитрия — могут содержать конфиденциальное и ПДн
-dmitry-docs/
-
-# ZIP-архивы (исходники документов Дмитрия)
-*.zip
-
-# Секреты
+# ===== СЕКРЕТЫ И КРЕДЫ — НИКОГДА В РЕПО =====
+# .env и любые его варианты, кроме примера
 .env
-.env.local
-.env.production
-.env.development
+.env.*
+!.env.example
+
+# Ключи, сертификаты, токены
 *.key
 *.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+*credential*
+*credentials*
+*secret*
+*secrets*
+*token*
+*tokens*
+auth_*.json
+service_account*.json
 
-# Локальные данные
+# Конфиги с реальными данными
+config.local.*
+*.local.yml
+*.local.yaml
+*.local.json
+*.local.toml
+
+# ===== ЛОКАЛЬНЫЕ ДОКУМЕНТЫ И ЗАМЕТКИ =====
+# Документы Дмитрия / менеджеров — могут содержать ПДн и конфиденциальное
+dmitry-docs/
+managers-docs/
+private/
+notes_local/
+
+# Любые офисные документы с локальной машины
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pdf
+*.pptx
+*.ppt
+*.odt
+
+# ZIP-архивы (исходники документов)
+*.zip
+*.tar.gz
+*.7z
+*.rar
+
+# Несвязанные с проектом локальные папки
+hr-tasks/
+
+# ===== БАЗА ДАННЫХ И ДАМПЫ =====
 *.db
 *.sqlite
 *.sqlite3
+*.dump
+*.sql.gz
 
-# Логи
+# ===== ЛОГИ =====
 *.log
 logs/
 
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
+# ===== PYTHON =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+venv/
+.venv/
+env/
+ENV/
 
-# IDE
+# ===== NODE (если будет фронт в будущем) =====
+node_modules/
+dist/
+build/
+.next/
+
+# ===== INFRASTRUCTURE =====
+# OpenClaw локальные данные
+.openclaw/
+
+# Vercel (старая презентация — больше не используется, но на всякий)
+.vercel
+
+# Terraform / Pulumi / Docker — если будут
+.terraform/
+*.tfstate
+*.tfstate.*
+.pulumi/
+
+# ===== IDE / РЕДАКТОРЫ =====
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-venv/
-.venv/
+# ===== CLAUDE CODE — ЛОКАЛЬНОЕ СОСТОЯНИЕ =====
+# Не коммитим, у каждого разработчика своё
+.claude/
+.gsd/
 
-# Node
-node_modules/
-dist/
-build/
+# ===== OS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
 
-# OpenClaw локальные данные
-.openclaw/
-~/.openclaw/
-
-# Временные
+# ===== ВРЕМЕННЫЕ =====
 tmp/
+.tmp/
 *.tmp
 *.bak
-
-.vercel
+*.orig
+*.rej
