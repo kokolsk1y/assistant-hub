@@ -1,81 +1,159 @@
 {
   "project": "Assistant Hub",
-  "updated": "2026-05-25",
+  "updated": "2026-05-26",
+  "team": {
+    "developers": ["Коля", "Евгений"],
+    "managers": ["Дмитрий", "Александр"],
+    "process": "Коля+Евгений строят план парой со взаимным ревью; согласование с менеджерами батчем"
+  },
   "tasks": [
     {
       "id": 1,
-      "text": "Созвон с Дмитрием для согласования концепции (показываем презентацию https://assistant-hub-7k9p2x.vercel.app через screen share)",
+      "text": "Запушить обновлённую документацию (PROJECT.md, REVIEW_RESPONSE.md, IMPLEMENTATION_PLAN.md, README.md) в кооперативный репо github.com/kokolsk1y/assistant-hub-team",
       "status": "pending",
       "approved": true,
-      "created": "2026-05-24 22:00"
+      "created": "2026-05-26 17:30"
     },
     {
       "id": 2,
-      "text": "После созвона — заполнить ответы из чек-листа (слайд 20) в site/index.html",
+      "text": "Отправить ссылку на REVIEW_RESPONSE.md Евгению — пусть проверит ответы на свои 11 замечаний, при необходимости правит прямо в репо",
       "status": "pending",
       "approved": true,
-      "created": "2026-05-24 22:00"
+      "created": "2026-05-26 17:30",
+      "depends_on": [1]
     },
     {
       "id": 3,
-      "text": "После согласования — обновить PROJECT.md под реальные решения Дмитрия",
+      "text": "Согласовать с Дмитрием и Александром через общий чат: обновлённую концепцию + 14-фазный план MVP (71ч) + бизнес-правила (грейды, типы ошибок, оплата по лимиту, peer-review)",
       "status": "pending",
       "approved": true,
-      "created": "2026-05-24 22:00"
+      "created": "2026-05-26 17:30",
+      "depends_on": [2]
     },
     {
       "id": 4,
-      "text": "Задача M1.1 — установить WSL2 + Python 3.12+ + aiogram 3 (1.5ч)",
+      "text": "Фаза M1 — Инфраструктура (5ч): WSL2 + Python 3.12 + aiogram 3 + Neon + TG-бот + структура проекта",
       "status": "pending",
       "approved": false,
-      "created": "2026-05-24 22:00",
-      "depends_on": [3]
+      "created": "2026-05-26 17:30",
+      "depends_on": [3],
+      "note": "Стартуем после добра от менеджеров"
     },
     {
       "id": 5,
-      "text": "Задача M1.2 — Neon Postgres подключение через asyncpg (1ч)",
+      "text": "Фаза M2 — Схема БД + таблицы политик + seed (6ч): candidates, tests, test_submissions, tasks, task_assignments, assistants, grades, error_types, retry_policies, config, audit_log, operators + seed дефолтов",
       "status": "pending",
       "approved": false,
-      "created": "2026-05-24 22:00",
+      "created": "2026-05-26 17:30",
       "depends_on": [4]
     },
     {
       "id": 6,
-      "text": "Задача M1.3 — TG-бот через BotFather (dev токен), /start работает (1ч)",
+      "text": "Фаза M3 — ПДн + source + базовые команды (4ч): согласие на ПДн, парсинг source-метки, /cancel, /me, /help",
       "status": "pending",
       "approved": false,
-      "created": "2026-05-24 22:00",
-      "depends_on": [4]
+      "created": "2026-05-26 17:30",
+      "depends_on": [5]
     },
     {
       "id": 7,
-      "text": "Починить автодеплой Vercel при push в GitHub (сейчас deploy ручной из site/)",
+      "text": "Фаза M4 — FSM анкеты + реактивация (5ч): 4 вопроса с кнопками, реактивация прерванной анкеты",
       "status": "pending",
       "approved": false,
-      "created": "2026-05-24 22:00",
-      "note": "Не критично. Сейчас работает через vercel --prod --yes из site/"
+      "created": "2026-05-26 17:30",
+      "depends_on": [6]
     },
     {
       "id": 8,
-      "text": "Доработать слайд про мокапы сообщений в презентации после первого созвона",
+      "text": "Фаза M5 — Тестовое + напоминания (6ч): выдача задания, приём результата, APScheduler напоминания 24/48/72ч",
       "status": "pending",
       "approved": false,
-      "created": "2026-05-24 22:00"
+      "created": "2026-05-26 17:30",
+      "depends_on": [7]
+    },
+    {
+      "id": 9,
+      "text": "Фаза M6 — Дашборд оценки + ACL + типизация ошибок (8ч): @require_role, /queue, кнопки решения, 4 типа ошибок, комментарий модератора",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [8]
+    },
+    {
+      "id": 10,
+      "text": "Фаза M7 — Создание задачи с полной карточкой (3ч): /newtask с expected_result и context_materials",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [9]
+    },
+    {
+      "id": 11,
+      "text": "Фаза M8 — Шаблон отчёта pre-start (2ч): free-form структура выхода перед /start_work",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [10]
+    },
+    {
+      "id": 12,
+      "text": "Фаза M9 — Сценарии поведения для код-задач (2ч): обязательный артефакт «X → Y» при /done",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [11]
+    },
+    {
+      "id": 13,
+      "text": "Фаза M10 — Распределение (гибрид тендер→round-robin) + учёт времени (6ч): окно тендера 5-10 мин, fallback round-robin, /start_work /pause /done",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [12]
+    },
+    {
+      "id": 14,
+      "text": "Фаза M11 — Оплата + апелляция + возвраты + не-сдачи (7ч): payout=limit×rate, апелляция 1 раз, правила доработки, grace 2ч, пауза при 3 fails",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [13]
+    },
+    {
+      "id": 15,
+      "text": "Фаза M12 — Peer-review lite (8ч): выбор B, чек-лист 5-7 пунктов, типизация ошибок, оплата B 50₽, интеграция с грейдами",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [14]
+    },
+    {
+      "id": 16,
+      "text": "Фаза M13 — Сводка + cron + аудит (4ч): /weekly, cron понедельник 09:00, /grade_review, audit_log",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [15]
+    },
+    {
+      "id": 17,
+      "text": "Фаза M14 — Запуск + документация (5ч): E2E тест, документация для менеджеров, первый реальный кандидат",
+      "status": "pending",
+      "approved": false,
+      "created": "2026-05-26 17:30",
+      "depends_on": [16]
     }
   ],
   "completed_summary": {
-    "phase": "Концепция и презентация",
+    "phase": "Концепция и согласование (после ревью Евгения)",
     "delivered": [
-      "PROJECT.md, ACCESS_REQUESTS.md, README.md",
-      "20-слайдная презентация на Vercel с Mermaid + бейджи фаз",
-      "IMPLEMENTATION_PLAN.md (39-48ч MVP / 30-40ч Доработка / 50-70ч Развитие)",
-      "IMPROVEMENTS.md (15+ идей улучшений + Proxy-коммуникации)",
-      "V2_FEATURES.md (буфер идей)",
-      "4 research-документа (stack/features/architecture/pitfalls)",
-      "ARCHITECTURE_AND_QUESTIONS.md (архив диаграмм)",
-      "GitHub приватный репо, всё закоммичено",
-      "Документы Dmitry прочитаны и проанализированы (в dmitry-docs/, .gitignore)",
-      "Глобальная память Claude обновлена для смены сессий"
+      "PROJECT.md обновлён под новые решения (грейды, типы ошибок, оплата по лимиту, правила возвратов, peer-review, policies в Neon)",
+      "REVIEW_RESPONSE.md — ответы на все 11 замечаний Евгения",
+      "IMPLEMENTATION_PLAN.md — 14 фаз MVP (71ч) с точными часами и триггерами для Доработки I и Развития II",
+      "README.md обновлён под новую команду и процесс",
+      "Репо почищен: убрали site/, ARCHITECTURE_AND_QUESTIONS, SESSION_STATE, ACCESS_REQUESTS",
+      "Кооперативный репо github.com/kokolsk1y/assistant-hub-team создан, Евгений добавлен с правом Write",
+      "Команда зафиксирована: Коля+Евгений (разработка с взаимным ревью), Дмитрий+Александр (менеджеры/заказчики)"
     ]
   }
 }
